@@ -51,6 +51,8 @@ function App() {
 
           <Route path={'/facebook-post'} element={<FbPostPage />} />
           <Route path={'/instagram-post'} element={<InstagramPostPage />} />
+
+          {/* policy */}
           <Route path={'/termeni-conditii'} element={<TncPage />} />
           <Route path={'/termeni-utilizare'} element={<TouPage />} />
           <Route path={'/gdpr'} element={<GdprPage />} />

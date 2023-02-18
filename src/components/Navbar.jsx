@@ -40,7 +40,7 @@ const Navbar = () => {
       >
         <Link to={'/'}>
           <Heading as={'h1'} cursor={'pointer'}>
-            brand name
+            AP
           </Heading>
         </Link>
         {isDesktop ? (

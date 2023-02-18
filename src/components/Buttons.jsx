@@ -6,6 +6,7 @@ const Buttons = (props) => {
   return (
     <Link to={props.link}>
       <Button
+        type={props.type}
         bg={props.bg === 'brand' ? 'brand' : 'transparent'}
         border={props.bg === 'secondary' ? '1px solid #000' : 'none'}
         color={props.bg === 'brand' ? 'textLight' : 'textDark'}
