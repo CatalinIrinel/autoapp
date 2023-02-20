@@ -2,8 +2,10 @@ import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ScrollToTop from './ScrollToTop';
 
+// aos for animations
 import Aos from 'aos';
 import 'aos/dist/aos.css';
+
 // Toast alerts
 // import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -24,7 +26,7 @@ import {
 import { Box } from '@chakra-ui/react';
 import { useEffect } from 'react';
 
-// facebook sdk
+//appId="1239358320322409"
 
 function App() {
   useEffect(() => {

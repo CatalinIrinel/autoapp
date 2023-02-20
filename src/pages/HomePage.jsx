@@ -10,11 +10,11 @@ const HomePage = () => {
         <title>Autopost - Partenerul tau la social media</title>
         {/* de adaugat datele pentru SEO */}
       </Helmet>
-      <Hero />
+      {/* <Hero /> */}
       <Cta />
-      <Functionality />
-      <Prices />
-      <About />
+      {/* <Functionality /> */}
+      {/* <Prices /> */}
+      {/* <About /> */}
     </VStack>
   );
 };

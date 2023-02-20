@@ -80,7 +80,7 @@ const LoginPage = () => {
         </Box>
         <Box display="flex" justifyContent="center">
           Client Nou?&nbsp;
-          <Link className="links" to={`/register?redirect=${redirect}`}>
+          <Link className="links" to={`/inregistrare?redirect=${redirect}`}>
             Crează-ți contul aici!
           </Link>
         </Box>
