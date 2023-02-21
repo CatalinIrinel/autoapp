@@ -7,7 +7,7 @@ import Aos from 'aos';
 import 'aos/dist/aos.css';
 
 // Toast alerts
-// import { ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 // import AdminRoute from './components/AdminRoute';
@@ -37,6 +37,7 @@ function App() {
       <Navbar />
       <Sidebar />
       <ScrollToTop />
+      <ToastContainer position="top-right" limit={1} />
       <Box
         display={'flex'}
         alignItems={'center'}

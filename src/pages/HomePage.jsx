@@ -1,7 +1,7 @@
 import { VStack } from '@chakra-ui/react';
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Hero, Cta, Functionality, Prices, About } from '../components';
+import { Cta } from '../components';
 
 const HomePage = () => {
   return (
