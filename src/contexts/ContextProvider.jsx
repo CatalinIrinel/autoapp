@@ -1,15 +1,15 @@
-import React, { createContext, useContext, useReducer, useState } from 'react';
+import { createContext, useReducer } from 'react';
 
-const StateContext = createContext();
+export const State = createContext();
 
 const initialState = {
-  chat: false,
-  userProfile: false,
-  notification: false,
   userInfo: localStorage.getItem('userInfo')
     ? JSON.parse(localStorage.getItem('userInfo'))
     : null,
   cart: {
+    shippingAddress: localStorage.getItem('shippingAddress')
+      ? JSON.parse(localStorage.getItem('shippingAddress'))
+      : {},
     paymentMethod: localStorage.getItem('paymentMethod')
       ? localStorage.getItem('paymentMethod')
       : '',
@@ -62,6 +62,11 @@ function reducer(state, action) {
           paymentMethod: '',
         },
       };
+    case 'SAVE_SHIPPING_ADDRESS':
+      return {
+        ...state,
+        cart: { ...state.cart, shippingAddress: action.payload },
+      };
     case 'SAVE_PAYMENT_METHOD':
       return {
         ...state,
@@ -72,28 +77,9 @@ function reducer(state, action) {
   }
 }
 
-export const ContextProvider = ({ children }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [openSettigns, setOpenSettings] = useState(false);
+export function ContextProvider(props) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const value = { state, dispatch };
-  const [isClicked, setIsClicked] = useState(initialState);
 
-  return (
-    <StateContext.Provider
-      value={{
-        value,
-        isOpen,
-        setIsOpen,
-        openSettigns,
-        setOpenSettings,
-        isClicked,
-        setIsClicked,
-      }}
-    >
-      {children}
-    </StateContext.Provider>
-  );
-};
-
-export const useStateContext = () => useContext(StateContext);
+  return <State.Provider value={value}>{props.children}</State.Provider>;
+}

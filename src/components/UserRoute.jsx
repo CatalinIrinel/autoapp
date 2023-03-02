@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
 import { Navigate } from 'react-router-dom';
-import { ContextProvider } from '../contexts/ContextProvider';
+import { State } from '../contexts/ContextProvider';
 
 function UserRoute({ children }) {
-  const { state } = useContext(ContextProvider);
+  const { state } = useContext(State);
   const { userInfo } = state;
-  return userInfo ? children : <Navigate to="/login" />;
+  return userInfo ? children : <Navigate to="/logare" />;
 }
 
 export default UserRoute;

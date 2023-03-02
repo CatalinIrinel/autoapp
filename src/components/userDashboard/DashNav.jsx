@@ -1,140 +1,124 @@
-import React, { useContext } from 'react';
-import { FlexBox } from './customChakra/flexBox';
 import {
-  Avatar,
   Box,
-  Button,
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuDivider,
-  MenuItem,
-  MenuList,
-  Tooltip,
+  Image,
+  ListItem,
+  UnorderedList,
+  useColorModeValue,
 } from '@chakra-ui/react';
-import { HamburgerIcon, ChevronDownIcon } from '@chakra-ui/icons';
-import { BsChatDots, BsCart2, BsBell } from 'react-icons/bs';
-import { useStateContext } from '../../contexts/ContextProvider';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
-const NavButton = ({ title, onClick, icon, color, bgColor }) => (
-  <Tooltip hasArrow label={title} placement={'bottom'}>
-    <IconButton
-      bg={'transparent'}
-      onClick={onClick}
-      color={color}
-      _hover={{ background: bgColor }}
-      _active={'none'}
-      fontSize={'1.5rem'}
-      icon={icon}
-      borderRadius={'50%'}
-    />
-  </Tooltip>
-);
-
-const Navbar = ({ toggle }) => {
-  const {
-    state,
-    dispatch: ctxDispatch,
-    handleClick,
-    setIsOpen,
-  } = useContext(useStateContext);
-  const { userInfo } = state;
-
-  const signoutHandler = () => {
-    ctxDispatch({ type: 'USER_SIGNOUT' });
-    localStorage.removeItem('userInfo');
-    localStorage.removeItem('shippingAddress');
-    localStorage.removeItem('paymentMethod');
-  };
-
+const DashSidebar = () => {
   return (
-    <FlexBox
-      className={'navbar'}
-      bg={'brand'}
-      height={'70px'}
-      alignItems={'center'}
-      justifyContent={'center'}
+    <Box
+      w={'13rem'}
+      height={'100vh'}
+      position={'fixed'}
+      zIndex={100000}
+      top={0}
+      left={0}
+      display={'flex'}
+      flexDir={'column'}
+      alignItems={'flex-start'}
+      justifyContent={'flex-start'}
+      gap={'3rem'}
+      bg={'linear-gradient(90deg, #2a4365, #3182ce)'}
+      color={'text'}
+      transition={'all .8s ease-in-out'}
+      padding={'1.5rem 2rem'}
+      boxShadow={useColorModeValue(
+        '8px 0 1rem rgba(0,0,0,0.3)',
+        '0 0 1.5rem rgba(255,255,255,0.2)'
+      )}
+      fontSize={'1.25rem'}
+      className="sidebar"
     >
-      <FlexBox
-        variant={'wrapper'}
+      <Box
+        w={'full'}
+        display={'flex'}
         alignItems={'center'}
         justifyContent={'space-between'}
       >
-        <Tooltip hasArrow label={'Menu'} placement={'bottom'}>
-          <IconButton
-            bg={'brand'}
-            fontSize={'1.5rem'}
-            color={'textLight'}
-            _hover={'none'}
-            _active={'none'}
-            icon={<HamburgerIcon />}
-            onClick={() => setIsOpen(true)}
-          />
-        </Tooltip>
-        <Box
-          display={'flex'}
-          alignItems={'center'}
-          justifyContent={'space-between'}
-          flexWrap={'wrap'}
-          gap={'1rem'}
+        <Link to="/dashboard">
+          <Image width={'150px'} src={'/images/LogoFinal-W.png'} />
+        </Link>
+      </Box>
+      <UnorderedList
+        w={'full'}
+        m={0}
+        listStyleType={'none'}
+        display={'flex'}
+        flexDir={'column'}
+        color={'titleLight'}
+      >
+        <ListItem
+          color={useColorModeValue('titleLight', 'secondaryDark')}
+          fontWeight={'bold'}
+          textDecoration={'underline'}
+          fontSize={'1rem'}
         >
-          <NavButton
-            title={'Cart'}
-            color={'textLight'}
-            bgColor={'brand'}
-            icon={<BsCart2 />}
-            onClick={() => handleClick('cart')}
-          />
-          <NavButton
-            title={'Chat'}
-            color={'textLight'}
-            bgColor={'brand'}
-            icon={<BsChatDots />}
-            onClick={() => handleClick('chat')}
-          />
-          <NavButton
-            title={'Notification'}
-            color={'textLight'}
-            bgColor={'brand'}
-            icon={<BsBell />}
-            onClick={() => handleClick('notification')}
-          />
-          <Tooltip hasArrow label={'Profile'} placement={'bottom'}>
-            <Avatar
-              onClick={() => handleClick('userProfile')}
-              size={'md'}
-              name={userInfo.surname}
-              src={'/images/userprofile.jpg'}
-            />
-          </Tooltip>
-          <Menu>
-            <Tooltip hasArrow label={'User Menu'} placement={'bottom'}>
-              <MenuButton
-                as={Button}
-                rightIcon={<ChevronDownIcon />}
-                _hover={{
-                  color: 'textLight',
-                  bgColor: 'brand',
-                }}
-              >
-                Hi, {userInfo.surname}
-              </MenuButton>
-            </Tooltip>
-            <MenuList>
-              <Link to="#">
-                <MenuItem></MenuItem>
-              </Link>
-              <MenuDivider />
-              <Link to="#delogare" onClick={signoutHandler}>
-                <MenuItem>Delogare</MenuItem>
-              </Link>
-            </MenuList>
-          </Menu>
-        </Box>
-      </FlexBox>
-    </FlexBox>
+          Panou de control
+        </ListItem>
+        <ListItem>
+          <Link to="/dashboard">Acasa</Link>
+        </ListItem>
+      </UnorderedList>
+
+      <UnorderedList
+        m={0}
+        listStyleType={'none'}
+        display={'flex'}
+        flexDir={'column'}
+        gap={'1rem'}
+        color={'titleLight'}
+      >
+        <ListItem
+          color={useColorModeValue('titleLight', 'titleDark')}
+          fontWeight={'bold'}
+          textDecoration={'underline'}
+          fontSize={'1rem'}
+        >
+          Apps
+        </ListItem>
+        {[
+          { text: 'workflow', link: '/workflow' },
+          { text: 'programari', link: '/programari' },
+          { text: 'comentarii', link: '/comentarii' },
+        ].map((item, index) => (
+          <ListItem textTransform={'capitalize'} key={index}>
+            <Link to={`/${item.link}`}>{item.text}</Link>
+          </ListItem>
+        ))}
+      </UnorderedList>
+
+      <UnorderedList
+        m={0}
+        listStyleType={'none'}
+        display={'flex'}
+        flexDir={'column'}
+        gap={'1rem'}
+        color={'titleLight'}
+      >
+        <ListItem
+          color={useColorModeValue('titleLight', 'secondaryDark')}
+          fontWeight={'bold'}
+          textDecoration={'underline'}
+          fontSize={'1rem'}
+        >
+          Statistici
+        </ListItem>
+        {[
+          { text: 'facebook', link: '/statistici/facebook' },
+          { text: 'instagram', link: '/statistici/instagram' },
+          { text: 'tiktok', link: '/statistici/tiktok' },
+        ].map((item, index) => (
+          <ListItem textTransform={'capitalize'} key={index}>
+            <Link to={`/${item.link}`}>{item.text}</Link>
+          </ListItem>
+        ))}
+      </UnorderedList>
+    </Box>
   );
 };
 
-export default Navbar;
+export default DashSidebar;

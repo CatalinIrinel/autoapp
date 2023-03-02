@@ -1,19 +1,19 @@
 import { Box, Button, Flex, Heading, HStack, Stack } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-scroll';
-import { useStateContext } from '../contexts/ContextProvider';
+import { State } from '../contexts/ContextProvider';
 
 const Sidebar = () => {
-  const { isOpen, setIsOpen } = useStateContext();
+  const { isOpen, setIsOpen } = useContext(State);
   return (
     <Box
-      w={['full', null, '22rem']}
+      w={['0', null, '0']}
       h={'100vh'}
       position={'fixed'}
       top={0}
-      right={isOpen ? 0 : '-24rem'}
-      display={'flex'}
+      right={0}
+      display={'none'}
       flexDir={'column'}
       alignItems={'flex-start'}
       justifyContent={'flex-start'}

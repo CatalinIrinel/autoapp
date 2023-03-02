@@ -12,18 +12,18 @@ import { Helmet } from 'react-helmet-async';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Buttons } from '../components';
-import { useStateContext } from '../contexts/ContextProvider';
+import { State } from '../contexts/ContextProvider';
 import { getError } from '../Utils';
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const { search } = useLocation();
   const redirectUrl = new URLSearchParams(search).get('redirect');
-  const redirect = redirectUrl ? redirectUrl : '/';
+  const redirect = redirectUrl ? redirectUrl : '/dashboard';
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const { state, dispatch: ctxDispatch } = useContext(useStateContext);
+  const { state, dispatch: ctxDispatch } = useContext(State);
   const { userInfo } = state;
 
   const submitHandler = async (e) => {
@@ -35,7 +35,7 @@ const LoginPage = () => {
       });
       ctxDispatch({ type: 'USER_SIGNIN', payload: data });
       localStorage.setItem('userInfo', JSON.stringify(data));
-      navigate(redirect || '/');
+      navigate(redirect || '/dashboard');
     } catch (err) {
       toast.error(getError(err));
     }
@@ -47,7 +47,13 @@ const LoginPage = () => {
     }
   }, [navigate, redirect, userInfo]);
   return (
-    <Flex w={'full'} flexDir={'column'} gap={'4rem'}>
+    <Flex
+      w={'full'}
+      flexDir={'column'}
+      gap={'4rem'}
+      alignItems={'center'}
+      justifyContent={'center'}
+    >
       <Helmet>
         <title>Logare - Auto Post</title>
         {/* aici nu trebuie seo */}

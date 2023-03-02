@@ -4,17 +4,25 @@ import {
   Button,
   ButtonGroup,
   Flex,
-  Heading,
   HStack,
+  Image,
   useBreakpointValue,
 } from '@chakra-ui/react';
-import React from 'react';
-import { Link } from 'react-scroll';
-import { useStateContext } from '../contexts/ContextProvider';
-import Buttons from './Buttons';
+import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
+import { State } from '../contexts/ContextProvider';
+import { LinkButtons } from './Buttons';
 
 const Navbar = () => {
-  const { setIsOpen } = useStateContext();
+  const { state, dispatch: ctxDispatch } = useContext(State);
+  const { userInfo } = state;
+  const { setIsOpen } = useContext(State);
+  const signoutHandler = () => {
+    ctxDispatch({ type: 'USER_SIGNOUT' });
+    localStorage.removeItem('userInfo');
+    localStorage.removeItem('shippingAddress');
+    localStorage.removeItem('paymentMethod');
+  };
   const isDesktop = useBreakpointValue({
     base: false,
     lg: true,
@@ -25,7 +33,7 @@ const Navbar = () => {
       display={'flex'}
       alignItems={'center'}
       justifyContent={'center'}
-      h={'60px'}
+      h={'100px'}
       color={'textDark'}
       as={'section'}
     >
@@ -39,9 +47,12 @@ const Navbar = () => {
         gap={10}
       >
         <Link to={'/'}>
-          <Heading as={'h1'} cursor={'pointer'}>
-            AP
-          </Heading>
+          <Image
+            w={'150px'}
+            objectFit={'contain'}
+            src={'/images/LogoFinal.png'}
+            alt={'Auto Post'}
+          />
         </Link>
         {isDesktop ? (
           <Flex
@@ -52,7 +63,14 @@ const Navbar = () => {
             flex={1}
           >
             <ButtonGroup>
-              {['acasa', 'despre', 'preturi', 'functionalitati'].map((item) => (
+              {[
+                'acasa',
+                'functionalitati',
+                'preturi',
+                'ghiduri',
+                'contact',
+                'despre',
+              ].map((item) => (
                 <Button
                   variant={'ghost'}
                   _hover={{
@@ -64,13 +82,13 @@ const Navbar = () => {
                   cursor={'pointer'}
                   textTransform={'capitalize'}
                 >
-                  <Link to={`#${item}`}>{item}</Link>
+                  <Link to={`/${item}`}>{item}</Link>
                 </Button>
               ))}
             </ButtonGroup>
             <HStack spacing="3">
-              <Buttons link={'/logare'} bg={'secondary'} text={'Logare'} />
-              <Buttons
+              <LinkButtons link={'/logare'} bg={'secondary'} text={'Logare'} />
+              <LinkButtons
                 link={'/inregistrare'}
                 bg={'brand'}
                 text={'Înregistrare'}

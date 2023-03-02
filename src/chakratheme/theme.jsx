@@ -2,13 +2,12 @@ import { extendTheme } from '@chakra-ui/react';
 
 export const myTheme = extendTheme({
   colors: {
-    gradientBg: 'linear-gradient(180deg , #000 -40%, #334868 )',
-    brand: '#334868',
-    secondary: '#3a034e',
+    brand: '#3182ce',
+    secondary: '#f0f0f0',
     titleLight: '#e1e1e1',
-    titleDark: '#1d3a66',
-    subtitleDark: '#00c96b',
-    subtitleLight: '#007c42',
+    titleDark: '#2a4365',
+    subtitleDark: '#bee3f8',
+    subtitleLight: '#2c5282',
     textDark: '#1b1b1b',
     textLight: '#e4e4e4',
   },
