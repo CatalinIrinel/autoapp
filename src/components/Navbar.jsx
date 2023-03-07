@@ -63,8 +63,19 @@ const Navbar = () => {
             flex={1}
           >
             <ButtonGroup>
+              <Button
+                variant={'ghost'}
+                _hover={{
+                  textDecoration: 'underline',
+                  textDecorationThickness: '2px',
+                  textUnderlineOffset: '7px',
+                }}
+                cursor={'pointer'}
+                textTransform={'capitalize'}
+              >
+                <Link to={`/`}>acasă</Link>
+              </Button>
               {[
-                'acasa',
                 'functionalitati',
                 'preturi',
                 'ghiduri',

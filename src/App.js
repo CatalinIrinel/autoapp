@@ -14,16 +14,18 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Footer, Navbar, Sidebar, UserRoute } from './components';
 // Pages
 import {
-  FbPostPage,
   GdprPage,
   HomePage,
-  InstagramPostPage,
   LoginPage,
   RegisterPage,
   TncPage,
   TouPage,
   PricesPage,
   Dashboard,
+  Functionality,
+  Guides,
+  Contact,
+  About,
 } from './pages';
 import { Box } from '@chakra-ui/react';
 import { useEffect } from 'react';
@@ -46,7 +48,7 @@ function App() {
         justifyContent={'center'}
         flexDir={'column'}
         w={'full'}
-        minH={'calc(100vh - 120px)'}
+        minH={'calc(100vh - 120px - 200px)'}
         px={['2rem', null, '6rem']}
       >
         <Routes>
@@ -56,11 +58,11 @@ function App() {
 
           {/* Nav pages */}
 
-          <Route path={'/functionalitati'} element={<FbPostPage />} />
+          <Route path={'/functionalitati'} element={<Functionality />} />
           <Route path={'/preturi'} element={<PricesPage />} />
-          <Route path={'/ghiduri'} element={<FbPostPage />} />
-          <Route path={'/contact'} element={<FbPostPage />} />
-          <Route path={'/despre'} element={<FbPostPage />} />
+          <Route path={'/ghiduri'} element={<Guides />} />
+          <Route path={'/contact'} element={<Contact />} />
+          <Route path={'/despre'} element={<About />} />
           {/* End of Nav Pages */}
 
           {/* User routes pages */}
@@ -72,9 +74,6 @@ function App() {
               </UserRoute>
             }
           />
-
-          <Route path={'/facebook-post'} element={<FbPostPage />} />
-          <Route path={'/instagram-post'} element={<InstagramPostPage />} />
 
           {/* policy */}
           <Route path={'/termeni-conditii'} element={<TncPage />} />

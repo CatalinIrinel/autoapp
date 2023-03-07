@@ -19,13 +19,13 @@ import {
   Textarea,
 } from '@chakra-ui/react';
 import { DeleteIcon } from '@chakra-ui/icons';
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useContext, useEffect, useReducer, useState } from 'react';
 // import { useNavigate } from 'react-router-dom';
 import { useInitFbSDK } from '../../hooks/fbHooks';
 import { getError } from '../../Utils';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import { State } from '../../contexts/ContextProvider';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -45,12 +45,14 @@ const reducer = (state, action) => {
 };
 
 const Cta = () => {
-  const [{ error, loadingUpdate }, dispatch] = useReducer(reducer, {
+  const { state } = useContext(State);
+  const { userInfo } = state;
+
+  const [{ loading, error, loadingUpdate }, dispatch] = useReducer(reducer, {
     loading: true,
     error: '',
   });
 
-  const navigate = useNavigate();
   // scopes pentru permisiuni pe fb
   // public_profile,ads_management, instagram_basic, publish_video, leads_retrieval, pages_manage_engagement, publish_to_groups, pages_manage_ads, pages_show_list, Page Public Metadata Access, Oembed Read, Page Public Content Access
 
@@ -62,6 +64,7 @@ const Cta = () => {
 
   // posts data
   const [postText, setPostText] = useState('');
+  const [postImages, setPostImages] = useState('');
   const [postImage, setPostImage] = useState('');
   const [postLink, setPostLink] = useState('');
   const [isPublishing, setIsPublishing] = useState(false);
@@ -175,6 +178,7 @@ const Cta = () => {
   // Publishes a post on the Facebook pages
   const sendPostToPage = React.useCallback(() => {
     setIsPublishing(true);
+
     if (postImage) {
       selectedPages.forEach((page) =>
         window.FB.api(
@@ -183,7 +187,7 @@ const Cta = () => {
           {
             message: postText,
             access_token: page.access_token,
-            url: `https://api.autopost.ro/${postImage}`,
+            url: postImage,
           },
           () => {
             setPostText('');
@@ -208,54 +212,53 @@ const Cta = () => {
         )
       );
     }
-  }, [selectedPages, postImage, postLink, postText]);
+  }, [postImage, selectedPages, postText, postLink]);
 
-  // const schedulePostToPage = React.useCallback(() => {
-  //   setIsPublishing(true);
-  //   // console.log('Is not disabled pages');
-  //   if (postImage) {
-  //     selectedPages.forEach((page) =>
-  //       window.FB.api(
-  //         `/${page.id}/photos`,
-  //         'POST',
-  //         {
-  //           message: postText,
-  //           access_token: page.access_token,
-  //           url: `https://api.autopost.ro/${postImage}`,
-  //           published: false,
-  //           scheduled_publish_time: schedulePost,
-  //         },
-  //         () => {
-  //           setPostText('');
-  //           setIsPublishing(false);
-  //         }
-  //       )
-  //     );
-  //   } else {
-  //     selectedPages.forEach((page) =>
-  //       window.FB.api(
-  //         `/${page.id}/feed`,
-  //         'POST',
-  //         {
-  //           message: postText,
-  //           access_token: page.access_token,
-  //           link: postLink || '',
-  //           published: false,
-  //           scheduled_publish_time: schedulePost,
-  //         },
-  //         () => {
-  //           setPostText('');
-  //           setIsPublishing(false);
-  //         }
-  //       )
-  //     );
-  //   }
-  // }, [selectedPages, postText, postLink, postImage, schedulePost]);
+  const schedulePost = React.useCallback(() => {
+    setIsPublishing(true);
+
+    if (postImage) {
+      selectedPages.forEach((page) =>
+        window.FB.api(
+          `/${page.id}/photos`,
+          'POST',
+          {
+            message: postText,
+            access_token: page.access_token,
+            url: postImage,
+            published: false,
+            scheduled_publish_time: schedulePost,
+          },
+          () => {
+            setPostText('');
+            setIsPublishing(false);
+          }
+        )
+      );
+    } else {
+      selectedPages.forEach((page) =>
+        window.FB.api(
+          `/${page.id}/feed`,
+          'POST',
+          {
+            message: postText,
+            access_token: page.access_token,
+            link: postLink || '',
+            published: false,
+            scheduled_publish_time: schedulePost,
+          },
+          () => {
+            setPostText('');
+            setIsPublishing(false);
+          }
+        )
+      );
+    }
+  }, [postImage, postLink, postText, selectedPages]);
 
   // Publishes a post on the Facebook groups
-  const sendPostToGroup = React.useCallback(() => {
+  const sendPostToGroup = React.useCallback(async () => {
     setIsPublishing(true);
-    // console.log('Is not disabled groups');
 
     if (postImage) {
       selectedGroups.forEach((group) =>
@@ -264,7 +267,7 @@ const Cta = () => {
           'POST',
           {
             message: postText,
-            url: `https://api.autopost.ro/${postImage}`,
+            url: postImage,
           },
           () => {
             setPostText('');
@@ -291,51 +294,31 @@ const Cta = () => {
   }, [postImage, postLink, postText, selectedGroups]);
 
   // const Link = 'https://api.autopost.ro';
-  const Link = 'http://localhost:5000';
-
-  // Server side upload
-  // const uploadFileHandler = async (e) => {
-  //   const image = e.target.files[0];
-  //   const bodyFormData = new FormData();
-  //   bodyFormData.append('imageName', image.name);
-  //   bodyFormData.append('imageData', image);
-
-  //   try {
-  //     dispatch({ type: 'UPLOAD_REQUEST' });
-  //     const { data } = await axios.post(`${Link}/api/uploads`, bodyFormData, {
-  //       headers: {
-  //         'Content-Type': 'multipart/form-data',
-  //         'Access-Control-Allow-Origin': 'https://localhost:3000',
-  //         // Authorization: `Bearer ${userInfo.token}`,
-  //       },
-  //     });
-  //     dispatch({ type: 'UPLOAD_SUCCESS' });
-
-  //     setPostImage(data.imageData);
-  //     toast.success('Poza au fost urcata cu succes.');
-  //   } catch (err) {
-  //     toast.error(getError(err));
-  //     dispatch({ type: 'UPLOAD_FAIL', payload: getError(err) });
-  //   }
-  // };
 
   // Cloud Side Upload
-  const uploadCloudHandler = async (e) => {
+
+  const uploadCloudHandler = async (e, forImages) => {
     const file = e.target.files[0];
     const bodyFormData = new FormData();
     bodyFormData.append('file', file);
 
     try {
       dispatch({ type: 'UPLOAD_REQUEST' });
-      const { data } = await axios.post(`/api/uploads`, bodyFormData, {
+      const { data } = await axios.post('/api/upload', bodyFormData, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          authorization: `Bearer ${userInfo.token}`,
         },
       });
       dispatch({ type: 'UPLOAD_SUCCESS' });
 
-      toast.success('Imagine adaugata cu succes');
-      setPostImage(data.secure_url);
+      if (forImages) {
+        setPostImages([...postImages, data.secure_url]);
+      } else {
+        setPostImage(data.secure_url);
+        console.log(data.secure_url);
+      }
+      toast.success('Pozele au fost urcate cu succes.');
     } catch (err) {
       toast.error(getError(err));
       dispatch({ type: 'UPLOAD_FAIL', payload: getError(err) });
@@ -377,7 +360,7 @@ const Cta = () => {
         toast.error('Pagina este deja aleasa');
       }
     } else {
-      toast.info('Poti selecta maxim 50 de pagini');
+      toast.info('Poți selecta maxim 50 de pagini');
     }
   };
 
@@ -388,33 +371,33 @@ const Cta = () => {
       if (!duplicate) {
         setSelectedGroups([...selectedGroups, group]);
       } else {
-        toast.error('Pagina este deja aleasa');
+        toast.error('Pagina este deja aleasă');
       }
     } else {
-      toast.info('Poti selecta maxim 50 de grupuri');
+      toast.info('Poți selecta maxim 50 de grupuri');
     }
   };
 
   // schimabre profil la pagina
   const [selectedPage, setSelectedPage] = useState();
 
-  const handlePageSelect = (page) => {
-    // Utilizatorul a selectat o pagină pentru a o administra
-    setSelectedPage(page);
-    // Schimbăm profilul conectat cu acea pagină
-    window.FB.api(`/${page.id}?fields=access_token`, 'GET', (response) => {
-      // Afisam notificare cu privire la schimbarea cu succes a profilului
+  // const handlePageSelect = (page) => {
+  //   // Utilizatorul a selectat o pagină pentru a o administra
+  //   setSelectedPage(page);
+  //   // Schimbăm profilul conectat cu acea pagină
+  //   window.FB.api(`/${page.id}?fields=access_token`, 'GET', (response) => {
+  //     // Afisam notificare cu privire la schimbarea cu succes a profilului
 
-      if (response && !response.error) {
-        toast.success(
-          `Profilul a fost schimbat cu succes pentru pagina ${page.name}!`
-        );
-        navigate('/facebook-post');
-      } else {
-        toast.error(response.error);
-      }
-    });
-  };
+  //     if (response && !response.error) {
+  //       toast.success(
+  //         `Profilul a fost schimbat cu succes pentru pagina ${page.name}!`
+  //       );
+  //       navigate('/facebook-post');
+  //     } else {
+  //       toast.error(response.error);
+  //     }
+  //   });
+  // };
 
   return (
     <Stack>
@@ -438,21 +421,21 @@ const Cta = () => {
               {selectedPage ? (
                 <>
                   {' '}
-                  <Text>Buna, {selectedPage.name}</Text>
+                  <Text>Bună, {selectedPage.name}</Text>
                   <Avatar src={selectedPage.url} />
                   <Button variant={'ghost'} onClick={() => setSelectedPage('')}>
-                    Schimba pe utilizator
+                    Schimbă pe utilizator
                   </Button>
                 </>
               ) : (
                 <>
                   {' '}
-                  <Text>Buna, {name}</Text>
+                  <Text>Bună, {name}</Text>
                   <Avatar src={userProfilePic} />
                 </>
               )}
               <Divider orientation="vertical" />
-              <Accordion allowMultiple>
+              {/* <Accordion allowMultiple>
                 <AccordionItem>
                   <AccordionButton>
                     Alege pe ce pagina sa gestionezi <AccordionIcon />
@@ -477,13 +460,13 @@ const Cta = () => {
                     </Stack>
                   </AccordionPanel>
                 </AccordionItem>
-              </Accordion>
+              </Accordion> */}
             </HStack>
             {!selectedPage && (
               <Accordion w={['500px']} allowMultiple>
                 <AccordionItem>
                   <AccordionButton>
-                    Alege pe ce pagini sa postezi <AccordionIcon />
+                    Alege pe ce pagini să postezi <AccordionIcon />
                   </AccordionButton>
                   <AccordionPanel pb={4}>
                     <Stack alignItems={'flex-start'}>
@@ -493,7 +476,7 @@ const Cta = () => {
                         _active={'none'}
                         onClick={addAllPages}
                       >
-                        Selecteaza primele 50
+                        Selectează primele 50
                       </Button>
                       <Divider />
                       <Stack gap={'1rem'} alignItems={'flex-start'}>
@@ -534,7 +517,7 @@ const Cta = () => {
                 <Accordion w={['500px']} allowMultiple>
                   <AccordionItem>
                     <AccordionButton>
-                      Alege pe ce grupuri sa postezi <AccordionIcon />
+                      Alege pe ce grupuri să postezi <AccordionIcon />
                     </AccordionButton>
                     <AccordionPanel pb={4}>
                       <Stack alignItems={'flex-start'}>
@@ -544,7 +527,7 @@ const Cta = () => {
                           _active={'none'}
                           onClick={addAllGroups}
                         >
-                          Selecteaza primele 50
+                          Selectează primele 50
                         </Button>
                         <Divider />
                         <Stack gap={'1rem'} alignItems={'flex-start'}>
@@ -586,7 +569,6 @@ const Cta = () => {
 
             <form>
               <Stack>
-                <Heading as={'h2'}>Test postare</Heading>
                 <Textarea
                   value={postText}
                   placeholder={'Introdu textul pentru postare'}
@@ -595,9 +577,11 @@ const Cta = () => {
                   onChange={(e) => setPostText(e.target.value)}
                 />
                 <FormControl>
-                  <FormLabel>Adauga o imagine:</FormLabel>
+                  <FormLabel>Adaugă o imagine:</FormLabel>
                   <Input
                     w={['300px', '500px']}
+                    name={'file'}
+                    accept={'image/*'}
                     type={'file'}
                     onChange={uploadCloudHandler}
                   />
@@ -636,11 +620,11 @@ const Cta = () => {
                 selectedGroups.length > 0
               }
             >
-              Posteaza pe pagini
+              Postează pe pagini
             </Button>
-            {/* <Button
+            <Button
               w={'fit-content'}
-              onClick={schedulePostToPage}
+              onClick={schedulePost}
               isDisabled={
                 !postText ||
                 isPublishing ||
@@ -648,8 +632,8 @@ const Cta = () => {
                 selectedGroups.length > 0
               }
             >
-              Programeaza pe pagini
-            </Button> */}
+              Programează pe pagini
+            </Button>
           </HStack>
           <Button
             w={'fit-content'}
@@ -661,7 +645,7 @@ const Cta = () => {
               selectedPages.length > 0
             }
           >
-            Posteaza pe grupuri
+            Postează pe grupuri
           </Button>
         </>
       ) : (
