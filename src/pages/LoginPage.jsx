@@ -12,7 +12,7 @@ import { Helmet } from 'react-helmet-async';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Buttons } from '../components';
-import { State } from '../contexts/ContextProvider';
+import { Store } from '../contexts/ContextProvider';
 import { getError } from '../Utils';
 
 const LoginPage = () => {
@@ -23,7 +23,7 @@ const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const { state, dispatch: ctxDispatch } = useContext(State);
+  const { state, dispatch: ctxDispatch } = useContext(Store);
   const { userInfo } = state;
 
   const submitHandler = async (e) => {
@@ -35,7 +35,7 @@ const LoginPage = () => {
       });
       ctxDispatch({ type: 'USER_SIGNIN', payload: data });
       localStorage.setItem('userInfo', JSON.stringify(data));
-      navigate(redirect || '/dashboard');
+      navigate(redirect || 'https://app.autopost.ro');
     } catch (err) {
       toast.error(getError(err));
     }
@@ -59,7 +59,7 @@ const LoginPage = () => {
         {/* aici nu trebuie seo */}
       </Helmet>
       <Box display="flex" justifyContent="center" w="100%" fontSize="2.5rem">
-        <Heading as="h1">Logează-te</Heading>
+        <Heading as="h1">Loghează-te</Heading>
       </Box>
       <form onSubmit={submitHandler}>
         <FormControl isRequired mb="2rem">

@@ -2,10 +2,10 @@ import { Box, Button, Flex, Heading, HStack, Stack } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import React, { useContext } from 'react';
 import { Link } from 'react-scroll';
-import { State } from '../contexts/ContextProvider';
+import { Store } from '../contexts/ContextProvider';
 
 const Sidebar = () => {
-  const { isOpen, setIsOpen } = useContext(State);
+  const { isOpen, setIsOpen } = useContext(Store);
   return (
     <Box
       w={['0', null, '0']}

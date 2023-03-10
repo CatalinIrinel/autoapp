@@ -17,7 +17,7 @@ import { Helmet } from 'react-helmet-async';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Buttons } from '../components';
-import { State } from '../contexts/ContextProvider';
+import { Store } from '../contexts/ContextProvider';
 import { getError } from '../Utils';
 
 const RegisterPage = () => {
@@ -32,7 +32,7 @@ const RegisterPage = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const { state, dispatch: ctxDispatch } = useContext(State);
+  const { state, dispatch: ctxDispatch } = useContext(Store);
   const { userInfo } = state;
 
   const submitHandler = async (e) => {

@@ -7,10 +7,11 @@ export const Buttons = (props) => {
     <Button
       type={props.type}
       bg={props.bg === 'brand' ? 'brand' : 'transparent'}
-      border={props.bg === 'secondary' ? '1px solid #3182ce' : 'none'}
-      color={props.bg === 'brand' ? 'textLight' : 'textDark'}
+      border={props.bg ? '1px solid #3182ce' : 'none'}
+      color={props.bg ? 'textLight' : 'textDark'}
       _hover={'none'}
       _active={'none'}
+      onClick={props.onClick || ''}
     >
       {props.text}
     </Button>
@@ -23,8 +24,8 @@ export const LinkButtons = (props) => {
       <Button
         type={props.type}
         bg={props.bg === 'brand' ? 'brand' : 'transparent'}
-        border={props.bg === 'secondary' ? '2px solid #3182ce' : 'none'}
-        color={props.bg === 'brand' ? 'textLight' : 'textDark'}
+        border={props.bg ? '2px solid #3182ce' : 'none'}
+        color={props.bg ? 'textLight' : 'textDark'}
         _hover={'none'}
         _active={'none'}
       >

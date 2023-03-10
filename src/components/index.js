@@ -2,7 +2,6 @@ export { default as AdminRoute } from './AdminRoute';
 export { Buttons, LinkButtons } from './Buttons';
 export { default as CheckoutSteps } from './CheckoutSteps';
 export { default as Footer } from './Footer';
-export { default as FormCard } from './FormCard';
 export { default as LoadingBox } from './LoadingBox';
 export { default as MessageBox } from './MessageBox';
 export { default as Navbar } from './Navbar';

@@ -1,6 +1,6 @@
 import { createContext, useReducer } from 'react';
 
-export const State = createContext();
+export const Store = createContext();
 
 const initialState = {
   userInfo: localStorage.getItem('userInfo')
@@ -81,5 +81,5 @@ export function ContextProvider(props) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const value = { state, dispatch };
 
-  return <State.Provider value={value}>{props.children}</State.Provider>;
+  return <Store.Provider value={value}>{props.children}</Store.Provider>;
 }

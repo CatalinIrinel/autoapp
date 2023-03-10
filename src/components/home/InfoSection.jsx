@@ -28,8 +28,19 @@ const InfoSection = ({ imageStart, image, title, text }) => {
           gridArea={'col1'}
           w={{ base: '300px', md: '500px', lg: '700px' }}
         >
-          <Heading as={'h2'}>{title}</Heading>
-          <Text w={{ base: '200px', md: '300px', lg: '450px' }}>{text}</Text>
+          <Heading
+            as={'h2'}
+            textAlign={{ base: 'center', md: 'left' }}
+            fontSize={{ base: '1.8rem', md: '2.25rem' }}
+          >
+            {title}
+          </Heading>
+          <Text
+            w={{ base: '300px', md: '500px', lg: '450px' }}
+            textAlign={{ base: 'center', md: 'left' }}
+          >
+            {text}
+          </Text>
         </Stack>
         <Stack
           w={{ base: '300px', md: '500px', lg: '700px' }}

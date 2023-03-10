@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, Image, Stack } from '@chakra-ui/react';
+import { Box, Flex, Heading, Highlight, Image, Stack } from '@chakra-ui/react';
 import React from 'react';
 import { LinkButtons } from '../Buttons';
 
@@ -6,12 +6,11 @@ const Hero = () => {
   return (
     <Flex
       w={'full'}
-      h={'100vh'}
+      h={{ base: 'fit-content', md: '100vh' }}
       flexDir={'column'}
       alignItems={'center'}
       justifyContent={'center'}
       className="container"
-      mt={'-100px'}
     >
       <Flex
         w={'full'}
@@ -22,7 +21,7 @@ const Hero = () => {
         flexWrap={'wrap'}
         className="wrapper"
       >
-        <Box w={{ base: '300px', md: '500px', lg: '700px' }}>
+        <Box w={{ base: '300px', md: '500px', xl: '700px' }}>
           <Image objectFit={'cover'} w={'100%'} src={'/images/hero.webp'} />
         </Box>
         <Flex
@@ -30,12 +29,18 @@ const Hero = () => {
           gap={'1.5rem'}
           w={{ base: '300px', md: '500px', lg: '700px' }}
         >
-          <Heading as={'h1'}>
-            Cel mai bun mod de optimizare și organizare a activității din MEDIUL
-            ONLINE
+          <Heading as={'h1'} textAlign={{ base: 'center', md: 'left' }}>
+            Cel mai bun mod de optimizare și organizare a activității din{' '}
+            <Highlight query={'MEDIUL ONLINE'} styles={{ color: 'brand' }}>
+              MEDIUL ONLINE
+            </Highlight>
           </Heading>
 
-          <Stack direction={{ base: 'column', md: 'row' }} gap={'1rem'}>
+          <Stack
+            direction={{ base: 'column', md: 'row' }}
+            alignItems={'center'}
+            gap={'1rem'}
+          >
             <LinkButtons
               bg={'brand'}
               link={'/dashboard'}

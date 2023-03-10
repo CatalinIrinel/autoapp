@@ -48,7 +48,7 @@ function App() {
         justifyContent={'center'}
         flexDir={'column'}
         w={'full'}
-        minH={'calc(100vh - 120px - 200px)'}
+        minH={'calc(100vh - 100px - 200px)'}
         px={['2rem', null, '6rem']}
       >
         <Routes>

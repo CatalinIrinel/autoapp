@@ -6,7 +6,7 @@ import InfoSection from '../components/home/InfoSection';
 
 const HomePage = () => {
   return (
-    <VStack w={'full'}>
+    <VStack w={'full'} gap={'3rem'}>
       <Helmet>
         <title>Autopost - Partenerul tau la social media</title>
         {/* de adaugat datele pentru SEO */}
@@ -14,7 +14,6 @@ const HomePage = () => {
       <Hero />
       <Cta />
       <InfoSection
-        imageStart
         image={'/images/home1.webp'}
         title={'Postează mai ușor și mai rapid'}
         text={
@@ -22,6 +21,7 @@ const HomePage = () => {
         }
       />
       <InfoSection
+        imageStart
         image={'/images/hom2.webp'}
         title={'Urmărește în timp real'}
         text={

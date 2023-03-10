@@ -40,12 +40,7 @@ const DashSidebar = () => {
         justifyContent={'space-between'}
       >
         <Link to="/dashboard">
-          <Image
-            width={'150px'}
-            src={
-              '/media/catalin/WebDevelop/AutoPost/frontend/public/images/LogoFinal-W.png'
-            }
-          />
+          <Image width={'150px'} src={'/images/LogoFinal-W.png'} />
         </Link>
       </Box>
       <UnorderedList

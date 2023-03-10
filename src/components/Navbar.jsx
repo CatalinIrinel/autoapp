@@ -1,22 +1,21 @@
 import { HamburgerIcon } from '@chakra-ui/icons';
 import {
   Box,
-  Button,
-  ButtonGroup,
   Flex,
   HStack,
   Image,
+  Text,
   useBreakpointValue,
 } from '@chakra-ui/react';
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { State } from '../contexts/ContextProvider';
-import { LinkButtons } from './Buttons';
+import { Buttons, LinkButtons } from './Buttons';
+import { Store } from '../contexts/ContextProvider';
 
-const Navbar = () => {
-  const { state, dispatch: ctxDispatch } = useContext(State);
+const Navbar = ({ toggle }) => {
+  const { state, dispatch: ctxDispatch } = useContext(Store);
   const { userInfo } = state;
-  const { setIsOpen } = useContext(State);
+
   const signoutHandler = () => {
     ctxDispatch({ type: 'USER_SIGNOUT' });
     localStorage.removeItem('userInfo');
@@ -40,6 +39,7 @@ const Navbar = () => {
       <Box
         as={'nav'}
         w={'full'}
+        px={['2rem', null, 0]}
         maxW={'90rem'}
         display={'flex'}
         alignItems={'center'}
@@ -62,19 +62,22 @@ const Navbar = () => {
             fontSize={'1.2rem'}
             flex={1}
           >
-            <ButtonGroup>
-              <Button
-                variant={'ghost'}
-                _hover={{
-                  textDecoration: 'underline',
-                  textDecorationThickness: '2px',
-                  textUnderlineOffset: '7px',
-                }}
-                cursor={'pointer'}
-                textTransform={'capitalize'}
-              >
-                <Link to={`/`}>acasă</Link>
-              </Button>
+            <HStack gap={'1rem'} textTransform={'capitalize'}>
+              <Link to={`/`}>
+                <Text
+                  w={'fit-content'}
+                  transition={'border-bottom .2s ease-out'}
+                  letterSpacing={'1px'}
+                  _hover={{
+                    color: 'brand',
+
+                    borderBottom: 'medium solid #3383be',
+                  }}
+                >
+                  acasa
+                </Text>
+              </Link>
+
               {[
                 'functionalitati',
                 'preturi',
@@ -82,28 +85,43 @@ const Navbar = () => {
                 'contact',
                 'despre',
               ].map((item) => (
-                <Button
-                  variant={'ghost'}
-                  _hover={{
-                    textDecoration: 'underline',
-                    textDecorationThickness: '2px',
-                    textUnderlineOffset: '7px',
-                  }}
-                  key={item}
-                  cursor={'pointer'}
-                  textTransform={'capitalize'}
-                >
-                  <Link to={`/${item}`}>{item}</Link>
-                </Button>
+                <Link key={item} to={`/${item}`}>
+                  <Text
+                    w={'fit-content'}
+                    letterSpacing={'1px'}
+                    transition={'border-bottom .2s ease-out'}
+                    _hover={{
+                      color: 'brand',
+
+                      borderBottom: 'medium solid #3383be',
+                    }}
+                  >
+                    {item}
+                  </Text>
+                </Link>
               ))}
-            </ButtonGroup>
+            </HStack>
             <HStack spacing="3">
-              <LinkButtons link={'/logare'} bg={'secondary'} text={'Logare'} />
-              <LinkButtons
-                link={'/inregistrare'}
-                bg={'brand'}
-                text={'Înregistrare'}
-              />
+              {userInfo ? (
+                <Buttons
+                  bg={'brand'}
+                  text={'Delogare'}
+                  onClick={signoutHandler}
+                />
+              ) : (
+                <>
+                  <LinkButtons
+                    link={'/logare'}
+                    bg={'secondary'}
+                    text={'Logare'}
+                  />
+                  <LinkButtons
+                    link={'/inregistrare'}
+                    bg={'brand'}
+                    text={'Înregistrare'}
+                  />
+                </>
+              )}
             </HStack>
           </Flex>
         ) : (
@@ -112,7 +130,7 @@ const Navbar = () => {
             _hover={'none'}
             _avtive={'none'}
             aria-label="Open Menu"
-            onClick={() => setIsOpen(true)}
+            onClick={toggle}
           />
         )}
       </Box>
