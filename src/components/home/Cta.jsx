@@ -48,7 +48,7 @@ const Cta = () => {
   const { state } = useContext(State);
   const { userInfo } = state;
 
-  const [{ loading, error, loadingUpdate }, dispatch] = useReducer(reducer, {
+  const [{ error, loadingUpdate }, dispatch] = useReducer(reducer, {
     loading: true,
     error: '',
   });
@@ -77,9 +77,8 @@ const Cta = () => {
 
   // pages data
   const [pages, setPages] = useState([]);
-  // const [pagesProfilePicture, setPagesProfilePicture] = useState([]);
+  const [pagesProfilePicture, setPagesProfilePicture] = useState([]);
   const [selectedPages, setSelectedPages] = useState([]);
-  // const [schedulePost, setSchedulePost] = useState('');
 
   //pages group
   // const [pageGroups, setPageGroups] = useState([]);
@@ -159,7 +158,11 @@ const Cta = () => {
 
   // gets fb page profile picture
   // useEffect(() => {
-  //   pages.forEach((page) =>
+  //   console.log('Pages count');
+  //   console.log(pages.length);
+  //   pages.forEach((page, index) => {
+  //     console.log('Page icon ' + index);
+  //     console.log(page);
   //     window.FB.api(
   //       `/${page.id}/picture`,
   //       {
@@ -167,14 +170,19 @@ const Cta = () => {
   //       },
   //       (response) => {
   //         if (response && !response.error) {
+  //           // console.log('Profile picture');
   //           // console.log(response.data);
+  //           setPagesProfilePicture([...pagesProfilePicture, response.data.url]);
   //         }
   //       }
-  //     )
-  //   );
+  //     );
+  //   });
   // }, [pages, pagesProfilePicture]);
-
+  // // console.log('Pages count');
+  // // console.log(pages.length);
+  // console.log('Profile picture');
   // console.log(pagesProfilePicture);
+
   // Publishes a post on the Facebook pages
   const sendPostToPage = React.useCallback(() => {
     setIsPublishing(true);
@@ -316,7 +324,6 @@ const Cta = () => {
         setPostImages([...postImages, data.secure_url]);
       } else {
         setPostImage(data.secure_url);
-        console.log(data.secure_url);
       }
       toast.success('Pozele au fost urcate cu succes.');
     } catch (err) {
@@ -378,27 +385,6 @@ const Cta = () => {
     }
   };
 
-  // schimabre profil la pagina
-  const [selectedPage, setSelectedPage] = useState();
-
-  // const handlePageSelect = (page) => {
-  //   // Utilizatorul a selectat o pagină pentru a o administra
-  //   setSelectedPage(page);
-  //   // Schimbăm profilul conectat cu acea pagină
-  //   window.FB.api(`/${page.id}?fields=access_token`, 'GET', (response) => {
-  //     // Afisam notificare cu privire la schimbarea cu succes a profilului
-
-  //     if (response && !response.error) {
-  //       toast.success(
-  //         `Profilul a fost schimbat cu succes pentru pagina ${page.name}!`
-  //       );
-  //       navigate('/facebook-post');
-  //     } else {
-  //       toast.error(response.error);
-  //     }
-  //   });
-  // };
-
   return (
     <Stack>
       <Heading as={'h1'}>Test Area</Heading>
@@ -418,55 +404,71 @@ const Cta = () => {
           </Box>{' '}
           <Stack>
             <HStack alignItems={'flex-start'}>
-              {selectedPage ? (
-                <>
-                  {' '}
-                  <Text>Bună, {selectedPage.name}</Text>
-                  <Avatar src={selectedPage.url} />
-                  <Button variant={'ghost'} onClick={() => setSelectedPage('')}>
-                    Schimbă pe utilizator
-                  </Button>
-                </>
-              ) : (
-                <>
-                  {' '}
-                  <Text>Bună, {name}</Text>
-                  <Avatar src={userProfilePic} />
-                </>
-              )}
+              <>
+                <Text>Bună, {name}</Text>
+                <Avatar src={userProfilePic} />
+              </>
+
               <Divider orientation="vertical" />
-              {/* <Accordion allowMultiple>
-                <AccordionItem>
-                  <AccordionButton>
-                    Alege pe ce pagina sa gestionezi <AccordionIcon />
-                  </AccordionButton>
-                  <AccordionPanel pb={4}>
-                    <Stack alignItems={'flex-start'}>
-                      <Divider />
-                      <Stack gap={'1rem'} alignItems={'flex-start'}>
-                        {pages.map((page) => (
-                          <Button
-                            key={page.id}
-                            variant={'ghost'}
-                            onClick={() => {
-                              handlePageSelect(page);
-                            }}
-                          >
-                            <Avatar name={page.name} src={''} />
-                            <Text>{page.name}</Text>
-                          </Button>
-                        ))}
-                      </Stack>
-                    </Stack>
-                  </AccordionPanel>
-                </AccordionItem>
-              </Accordion> */}
             </HStack>
-            {!selectedPage && (
+
+            <Accordion w={['500px']} allowMultiple>
+              <AccordionItem>
+                <AccordionButton>
+                  Alege pe ce pagini să postezi <AccordionIcon />
+                </AccordionButton>
+                <AccordionPanel pb={4}>
+                  <Stack alignItems={'flex-start'}>
+                    <Button
+                      variant={'ghost'}
+                      _hover={'none'}
+                      _active={'none'}
+                      onClick={addAllPages}
+                    >
+                      Selectează primele 50
+                    </Button>
+                    <Divider />
+                    <Stack gap={'1rem'} alignItems={'flex-start'}>
+                      {pages.map((page) => (
+                        <Button
+                          key={page.id}
+                          variant={'ghost'}
+                          onClick={() => {
+                            addPage(page);
+                          }}
+                        >
+                          <Avatar name={page.name} />
+                          <Text>{page.name}</Text>
+                        </Button>
+                      ))}
+                    </Stack>
+                  </Stack>
+                </AccordionPanel>
+              </AccordionItem>
+            </Accordion>
+
+            {selectedPages.length !== 0 && (
+              <HStack w={['500px']} flexWrap={'wrap'}>
+                {selectedPages.map((page) => (
+                  <Stack key={page.id}>
+                    {pagesProfilePicture.map((profile) => (
+                      <Avatar name={page.name} src={profile} />
+                    ))}
+
+                    <DeleteIcon
+                      color={'facebook.500'}
+                      onClick={() => deselectPage(page.id)}
+                    />
+                  </Stack>
+                ))}
+              </HStack>
+            )}
+
+            <>
               <Accordion w={['500px']} allowMultiple>
                 <AccordionItem>
                   <AccordionButton>
-                    Alege pe ce pagini să postezi <AccordionIcon />
+                    Alege pe ce grupuri să postezi <AccordionIcon />
                   </AccordionButton>
                   <AccordionPanel pb={4}>
                     <Stack alignItems={'flex-start'}>
@@ -474,18 +476,18 @@ const Cta = () => {
                         variant={'ghost'}
                         _hover={'none'}
                         _active={'none'}
-                        onClick={addAllPages}
+                        onClick={addAllGroups}
                       >
                         Selectează primele 50
                       </Button>
                       <Divider />
                       <Stack gap={'1rem'} alignItems={'flex-start'}>
-                        {pages.map((page) => (
+                        {userGroups.map((page) => (
                           <Button
                             key={page.id}
                             variant={'ghost'}
                             onClick={() => {
-                              addPage(page);
+                              addGroup(page);
                             }}
                           >
                             <Avatar name={page.name} />
@@ -497,75 +499,21 @@ const Cta = () => {
                   </AccordionPanel>
                 </AccordionItem>
               </Accordion>
-            )}
-            {selectedPages.length !== 0 && (
-              <HStack w={['500px']} flexWrap={'wrap'}>
-                {selectedPages.map((page) => (
-                  <Stack key={page.id}>
-                    <Avatar src={page.picture} />
+              {selectedGroups.length !== 0 && (
+                <HStack w={['500px']} flexWrap={'wrap'}>
+                  {selectedGroups.map((page) => (
+                    <Stack key={page.id}>
+                      <Avatar src={page.picture} />
 
-                    <DeleteIcon
-                      color={'facebook.500'}
-                      onClick={() => deselectPage(page.id)}
-                    />
-                  </Stack>
-                ))}
-              </HStack>
-            )}
-            {!selectedPage && (
-              <>
-                <Accordion w={['500px']} allowMultiple>
-                  <AccordionItem>
-                    <AccordionButton>
-                      Alege pe ce grupuri să postezi <AccordionIcon />
-                    </AccordionButton>
-                    <AccordionPanel pb={4}>
-                      <Stack alignItems={'flex-start'}>
-                        <Button
-                          variant={'ghost'}
-                          _hover={'none'}
-                          _active={'none'}
-                          onClick={addAllGroups}
-                        >
-                          Selectează primele 50
-                        </Button>
-                        <Divider />
-                        <Stack gap={'1rem'} alignItems={'flex-start'}>
-                          {userGroups.map((page) => (
-                            <Button
-                              key={page.id}
-                              variant={'ghost'}
-                              onClick={() => {
-                                addGroup(page);
-                              }}
-                            >
-                              <Avatar name={page.name} />
-                              <Text>{page.name}</Text>
-                            </Button>
-                          ))}
-                        </Stack>
-                      </Stack>
-                    </AccordionPanel>
-                  </AccordionItem>
-                </Accordion>
-                {selectedGroups.length !== 0 && (
-                  <HStack w={['500px']} flexWrap={'wrap'}>
-                    {selectedGroups.map((page) => (
-                      <Stack key={page.id}>
-                        <Avatar src={page.picture} />
-
-                        <DeleteIcon
-                          color={'facebook.500'}
-                          onClick={() => deselectGroup(page.id)}
-                        />
-                      </Stack>
-                    ))}
-                  </HStack>
-                )}
-              </>
-            )}
-
-            {selectedPage && <></>}
+                      <DeleteIcon
+                        color={'facebook.500'}
+                        onClick={() => deselectGroup(page.id)}
+                      />
+                    </Stack>
+                  ))}
+                </HStack>
+              )}
+            </>
 
             <form>
               <Stack>
