@@ -57,6 +57,7 @@ const About = () => {
           <Image
             w={{ base: '300px', md: 'full' }}
             src={'/images/about1.webp'}
+            loading={'lazy'}
           />
         </Stack>
         <Stack justifyContent={'center'} alignItems={'center'} gap={'1rem'}>
@@ -74,6 +75,7 @@ const About = () => {
           <Image
             w={{ base: '300px', md: 'full' }}
             src={'/images/about2.webp'}
+            loading={'lazy'}
           />
         </Stack>
         <Stack w={'full'} gap={'1rem'}>

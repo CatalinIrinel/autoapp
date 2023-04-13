@@ -22,6 +22,7 @@ const Cta = () => {
       >
         {ctaTexts.map((text) => (
           <Flex
+            key={text.title}
             border={'2px solid #3383bc'}
             w={'300px'}
             p={'1rem'}

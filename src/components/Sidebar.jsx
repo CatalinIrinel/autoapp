@@ -1,14 +1,12 @@
-import { Box, Button, Flex, Heading, HStack, Stack } from '@chakra-ui/react';
+import { Box, Flex, HStack, Image, Stack, Text } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
-import React, { useContext } from 'react';
+import React from 'react';
 import { Link } from 'react-scroll';
-import { Store } from '../contexts/ContextProvider';
 
-const Sidebar = () => {
-  const { isOpen, setIsOpen } = useContext(Store);
+const Sidebar = ({ isOpen, toggle }) => {
   return (
     <Box
-      w={['0', null, '0']}
+      w={[isOpen ? '80%' : 0, null, 0]}
       h={'100vh'}
       position={'fixed'}
       top={0}
@@ -34,27 +32,30 @@ const Sidebar = () => {
         gap={'3rem'}
       >
         <HStack w={'full'} justifyContent={'space-between'}>
-          <Heading fontSize={'1.5rem'} as={'h2'}>
-            Brand Name
-          </Heading>{' '}
-          <CloseIcon cursor={'pointer'} onClick={() => setIsOpen(false)} />
+          <Link to={'/'}>
+            <Image
+              w={'150px'}
+              objectFit={'contain'}
+              src={'/images/LogoFinal.png'}
+              alt={'Auto Post'}
+            />
+          </Link>
+          <CloseIcon cursor={'pointer'} onClick={toggle} />
         </HStack>
         <Stack alignItems={'flex-start'} spacing={'2rem'}>
-          {['Acasa', 'Despre', 'Preturi', 'Functionalitati'].map((item) => (
-            <Button
-              p={0}
-              variant={'ghost'}
-              _hover={{
-                textDecoration: 'underline',
-                textDecorationThickness: '2px',
-                textUnderlineOffset: '7px',
-              }}
-              key={item}
-              cursor={'pointer'}
-            >
-              <Link to="/acasa">{item}</Link>
-            </Button>
-          ))}
+          {['functionalitati', 'preturi', 'ghiduri', 'contact', 'despre'].map(
+            (item) => (
+              <Link key={item} to={`/${item}`} onClick={toggle}>
+                <Text
+                  w={'fit-content'}
+                  letterSpacing={'1px'}
+                  transition={'border-bottom .2s ease-out'}
+                >
+                  {item}
+                </Text>
+              </Link>
+            )
+          )}
         </Stack>
       </Flex>
     </Box>

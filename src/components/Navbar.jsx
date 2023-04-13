@@ -7,21 +7,10 @@ import {
   Text,
   useBreakpointValue,
 } from '@chakra-ui/react';
-import React, { useContext } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { Buttons, LinkButtons } from './Buttons';
-import { Store } from '../contexts/ContextProvider';
 
 const Navbar = ({ toggle }) => {
-  const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { userInfo } = state;
-
-  const signoutHandler = () => {
-    ctxDispatch({ type: 'USER_SIGNOUT' });
-    localStorage.removeItem('userInfo');
-    localStorage.removeItem('shippingAddress');
-    localStorage.removeItem('paymentMethod');
-  };
   const isDesktop = useBreakpointValue({
     base: false,
     lg: true,
@@ -100,28 +89,6 @@ const Navbar = ({ toggle }) => {
                   </Text>
                 </Link>
               ))}
-            </HStack>
-            <HStack spacing="3">
-              {userInfo ? (
-                <Buttons
-                  bg={'brand'}
-                  text={'Delogare'}
-                  onClick={signoutHandler}
-                />
-              ) : (
-                <>
-                  <LinkButtons
-                    link={'/logare'}
-                    bg={'secondary'}
-                    text={'Logare'}
-                  />
-                  <LinkButtons
-                    link={'/inregistrare'}
-                    bg={'brand'}
-                    text={'Înregistrare'}
-                  />
-                </>
-              )}
             </HStack>
           </Flex>
         ) : (

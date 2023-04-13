@@ -10,36 +10,37 @@ import 'aos/dist/aos.css';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-// import AdminRoute from './components/AdminRoute';
-import { Footer, Navbar, Sidebar, UserRoute } from './components';
+import { Footer, Navbar, Sidebar } from './components';
 // Pages
 import {
   GdprPage,
   HomePage,
-  LoginPage,
-  RegisterPage,
   TncPage,
   TouPage,
   PricesPage,
-  Dashboard,
   Functionality,
   Guides,
   Contact,
   About,
 } from './pages';
 import { Box } from '@chakra-ui/react';
-import { useEffect } from 'react';
-
-//appId="1239358320322409"
+import { useEffect, useState } from 'react';
 
 function App() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggle = () => {
+    setIsOpen((prev) => !prev);
+  };
+
   useEffect(() => {
     Aos.init();
   }, []);
+
   return (
     <Router>
-      <Navbar />
-      <Sidebar />
+      <Navbar toggle={toggle} />
+      <Sidebar toggle={toggle} isOpen={isOpen} />
       <ScrollToTop />
       <ToastContainer position="top-right" limit={1} />
       <Box
@@ -53,8 +54,6 @@ function App() {
       >
         <Routes>
           <Route path={'/'} element={<HomePage />} />
-          <Route path={'/logare'} element={<LoginPage />} />
-          <Route path={'/inregistrare'} element={<RegisterPage />} />
 
           {/* Nav pages */}
 
@@ -64,16 +63,6 @@ function App() {
           <Route path={'/contact'} element={<Contact />} />
           <Route path={'/despre'} element={<About />} />
           {/* End of Nav Pages */}
-
-          {/* User routes pages */}
-          <Route
-            path={'/dashboard'}
-            element={
-              <UserRoute>
-                <Dashboard />
-              </UserRoute>
-            }
-          />
 
           {/* policy */}
           <Route path={'/termeni-conditii'} element={<TncPage />} />

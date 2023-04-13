@@ -49,6 +49,7 @@ const InfoSection = ({ imageStart, image, title, text }) => {
           <Image
             w={{ base: '300px', md: '500px', lg: '700px' }}
             src={image}
+            loading={'lazy'}
             alt="Auto Post"
           />
         </Stack>

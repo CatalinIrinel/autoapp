@@ -1,9 +1,5 @@
-export { default as FbPostPage } from './FbPostPage';
 export { default as HomePage } from './HomePage';
 export { default as PricesPage } from './PricesPage';
-export { default as InstagramPostPage } from './InstagramPostPage';
-export { default as LoginPage } from './LoginPage';
-export { default as RegisterPage } from './RegisterPage';
 export { default as TncPage } from './policy/TncPage';
 export { default as TouPage } from './policy/TouPage';
 export { default as GdprPage } from './policy/GdprPage';
@@ -11,4 +7,3 @@ export { default as Contact } from './Contact';
 export { default as About } from './About';
 export { default as Functionality } from './Functionality';
 export { default as Guides } from './Guides';
-export { default as Dashboard } from './Dashboard';
